@@ -3,6 +3,8 @@
   <img src="media/img/vgbench.png" alt="Video game Benchmark">
 </p>
 
+Research Preview Website / Blogpost: [vgbench.com](vgbench.com)
+
 **VideoGameBench** is an evaluation benchmark for evaluating Vision-Language Models (VLMs) **multi-modal** understanding + reasoning on well-known video games. It currently supports Game Boy (through [PyBoy](https://github.com/Baekalfen/PyBoy)), MS-DOS (through [JS-DOS](https://js-dos.com/overview.html)), and browser games, providing a standardized way to evaluate LLM performance in game understanding and interaction.
 
 For mouse + keyboard games, we also provide a simple interface for helping the model generically / properly click on positions on the screen. We provide some example trajectories below of the model playing these games **real-time**, i.e. the model calls are async with respect to the game.
@@ -20,7 +22,7 @@ playwright install # Install playwright for DOS games
 ## Quick Start
 
 ### Running Game Boy Games (Gameboy Emulator)
-We provide a simple VideoGameAgent for DOS games which you can run below:
+Once you've downloaded and placed the appropriate ROMs into the `roms/` folder (for expected names, see `src/consts.py`). We provide a simple VideoGameAgent for Game Boy games which you can run below:
 
 ```bash
 # Run with a Game Boy ROM file
@@ -29,7 +31,7 @@ python main.py --game pokemon_red --model gpt-4o
 ```
 
 ### Running DOS Games (Mouse + Keyboard)
-We provide a simple VideoGameAgent for both Game Boy games which you can run below:
+DOS games are loaded with `js-dos` and do not requiring downloading games. We provide a simple VideoGameAgent for DOS games which you can run below:
 
 ```bash
 # Run Doom2 with Gemini 2.5 Pro
