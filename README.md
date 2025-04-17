@@ -3,7 +3,7 @@
   <img src="media/img/vgbench.png" alt="Video game Benchmark">
 </p>
 
-Research Preview Website / Blogpost: [vgbench.com](vgbench.com)
+Research Preview Website / Blogpost: [vgbench.com](https://www.vgbench.com)
 
 **VideoGameBench** is an evaluation benchmark for evaluating Vision-Language Models (VLMs) **multi-modal** understanding + reasoning on well-known video games. It currently supports Game Boy (through [PyBoy](https://github.com/Baekalfen/PyBoy)), MS-DOS (through [JS-DOS](https://js-dos.com/overview.html)), and browser games, providing a standardized way to evaluate LLM performance in game understanding and interaction.
 
