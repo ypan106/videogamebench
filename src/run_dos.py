@@ -94,8 +94,10 @@ async def run_dos_emulator(args):
         lite=args.lite,
         enable_ui=args.enable_ui,
         record=args.record,
+        num_screenshots_per_action=args.num_screenshots_per_action,
         task_prompt=args.task_prompt,
         press_key_delay=args.press_key_delay,
+        api_base=args.api_base
     )
 
     evaluator = DOSEvaluator(

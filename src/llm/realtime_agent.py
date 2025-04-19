@@ -58,7 +58,9 @@ class VideoGameBenchAgent:
                  context_window: int = 10, 
                  log_dir: Optional[Path] = None,
                  enable_ui: bool = False,
-                 record: bool = False):
+                 record: bool = False,
+                 num_screenshots_per_action: int = 3,
+                 api_base: Optional[str] = None):
         # Set up logging directory
         if log_dir is None:
             model_name = model.replace("/", "-").replace(".", "-")
@@ -77,7 +79,8 @@ class VideoGameBenchAgent:
             api_key=api_key,
             temperature=temperature,
             max_tokens=max_tokens,
-            log_dir=self.log_dir / "llm"
+            log_dir=self.log_dir / "llm",
+            api_base=api_base
         )
 
         # Common attributes
@@ -91,6 +94,7 @@ class VideoGameBenchAgent:
             "role": "system",
             "content": f"{self.system_instruction_prompt}\n\n{self.task_prompt}"
         }
+        self.num_screenshots_per_action = num_screenshots_per_action # TODO: make this work for GB
         
         self.reflection_memory = ""
         self.step_count = 0
@@ -164,7 +168,9 @@ class GameBoyAgent(VideoGameBenchAgent):
         log_dir: Optional[Path] = None,
         realtime: bool = False,
         enable_ui: bool = False,
-        record: bool = False
+        record: bool = False,
+        num_screenshots_per_action: int = 3,
+        api_base: Optional[str] = None
     ):
         """
         Initialize the GBA agent.
@@ -191,7 +197,9 @@ class GameBoyAgent(VideoGameBenchAgent):
             log_dir=log_dir,
             enable_ui=enable_ui,
             record=record,
-            task_prompt=task_prompt
+            task_prompt=task_prompt,
+            num_screenshots_per_action=num_screenshots_per_action,
+            api_base=api_base
         )
         
         self.realtime = realtime
@@ -413,6 +421,8 @@ class WebBrowsingAgent(VideoGameBenchAgent):
         log_dir: Optional[Path] = None,
         enable_ui: bool = False,
         record: bool = False,
+        num_screenshots_per_action: int = 3,
+        api_base: Optional[str] = None
     ):
         """
         Initialize the web browsing agent.
@@ -443,7 +453,9 @@ class WebBrowsingAgent(VideoGameBenchAgent):
             log_dir=log_dir,
             enable_ui=enable_ui,
             record=record,
-            task_prompt=task_prompt
+            task_prompt=task_prompt,
+            num_screenshots_per_action=num_screenshots_per_action,
+            api_base=api_base
         )
         
         # Initialize browser controller
@@ -708,7 +720,7 @@ class WebBrowsingAgent(VideoGameBenchAgent):
                     keys = action_input.split(",")
                     for key in keys:
                         await self.browser.press_key(key.strip(), lite_mode=self.lite, delay_ms=self.press_key_delay)
-                        for _ in range(5): 
+                        for _ in range(self.num_screenshots_per_action): 
                             screenshot = await self.browser.get_screenshot()
                             screenshots.append(screenshot)
                             await asyncio.sleep(0.05) 

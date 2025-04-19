@@ -57,6 +57,8 @@ def parse_args():
                        help="Path to save the recording (default: recordings/gameplay_TIMESTAMP.mp4)")
     parser.add_argument("--lite", action="store_true", 
                        help="Lite-mode, so not real time. Game pauses between actions.")
+    parser.add_argument("--num-screenshots-per-action", type=int, default=3, 
+                       help="Number of screenshots to take per action to add in context.")
 
     # DOS-specific arguments
     parser.add_argument("--port", type=int, default=8000, 
@@ -81,7 +83,10 @@ def parse_args():
                        help="Maximum tokens in conversation history (GBA only)")
     parser.add_argument("--action-frames", type=int, default=15,
                        help="Number of frames to run each action for (GBA only)")
-    
+    # Add api_base argument
+    parser.add_argument("--api-base", type=str, default=None,
+                       help="API base URL for Ollama or other providers")
+
     return parser.parse_args()
 
 def load_game_config(args):

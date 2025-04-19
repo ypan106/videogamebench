@@ -31,7 +31,7 @@ python main.py --game pokemon_red --model gpt-4o
 ```
 
 ### Running DOS Games (Mouse + Keyboard)
-DOS games are loaded with `js-dos` and do not requiring downloading games. We provide a simple VideoGameAgent for DOS games which you can run below:
+DOS games are loaded with `js-dos` and do not require downloading games. We provide a simple VideoGameAgent for DOS games which you can run below:
 
 ```bash
 # Run Doom2 with Gemini 2.5 Pro
@@ -48,6 +48,14 @@ python main.py --game quake --website-only
 ```
 
 You can specify a model name with `--model` (according to [LiteLLM](https://github.com/BerriAI/litellm) naming, which is very intuitive -- e.g. Gemini 2.0 Flash is `gemini/gemini-2.0-flash`) which will draw from your environment variables and/or `.env`, but you can specify particular keys with `--api-key`. Each game will also have an associated config with defaults in the `configs/` folder.
+
+**For local models with Ollama**: You can also specify an `api_base` with `--api-base` for models like Ollama, which works with LiteLLM. See more details at [https://docs.litellm.ai/docs/providers/ollama](https://docs.litellm.ai/docs/providers/ollama).
+
+```bash
+# First start ollama server
+
+python main.py --game kirby --model ollama/llama2 --api_base http://localhost:11434 --enable-ui
+```
 
 We also provide a GUI with `tkinter` to view the agent's actions, thoughts, memory, etc. with `--enable-ui`:
 

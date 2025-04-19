@@ -67,7 +67,9 @@ async def run_gba_emulator(args):
         realtime=not args.lite,
         enable_ui=args.enable_ui,
         record=args.record,
-        task_prompt=args.task_prompt
+        task_prompt=args.task_prompt,
+        num_screenshots_per_action=args.num_screenshots_per_action,
+        api_base=args.api_base
     )
     print(f"Using realtime agent with model: {model}")
     
