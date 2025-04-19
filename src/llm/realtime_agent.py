@@ -517,7 +517,8 @@ class WebBrowsingAgent(VideoGameBenchAgent):
         screenshot_path = screenshot_dir / f"screenshot_initial.jpg"
         with open(screenshot_path, "wb") as f:
             f.write(screenshot)
-            self.ui.take_screenshot(monitor_dir, "screenshot_initial.jpg")
+            if self.ui:
+                self.ui.take_screenshot(monitor_dir, "screenshot_initial.jpg")
         self.file_logger.info(f"Saved initial screenshot to {screenshot_path}")
 
         if self.lite:
