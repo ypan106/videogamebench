@@ -759,7 +759,8 @@ class WebBrowsingAgent(VideoGameBenchAgent):
                     screenshot_path = screenshot_dir / f"screenshot_{self.lite_counter}.jpg"
                     with open(screenshot_path, "wb") as f:
                         f.write(screenshot)
-                    self.ui.take_screenshot(monitor_dir, f"screenshot_{self.lite_counter}.jpg")
+                    if self.ui:
+                        self.ui.take_screenshot(monitor_dir, f"screenshot_{self.lite_counter}.jpg")
                 duration = time.time() - start_time
 
                 self.file_logger.info(f"Paused for {duration:.2f}s and took {len(screenshots)} screenshots")
