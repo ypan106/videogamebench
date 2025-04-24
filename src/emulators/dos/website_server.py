@@ -101,7 +101,7 @@ class DOSGameServer:
         self.playwright = await async_playwright().start()
         
         # Launch browser without viewport parameter
-        self.browser = await self.playwright.chromium.launch(headless=headless)
+        self.browser = await self.playwright.chromium.launch(headless=headless, args=["--disable-web-security"])
         
         # Create context with dimensions based on OS
         # Measured in viewport pixels
