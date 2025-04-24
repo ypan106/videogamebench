@@ -90,7 +90,7 @@ class BrowserController:
         Start the browser.
         """
         self.playwright = await async_playwright().start()
-        self.browser = await self.playwright.chromium.launch(headless=self.headless)
+        self.browser = await self.playwright.chromium.launch(headless=self.headless, args=["--disable-web-security"])
 
         viewport_dimensions = {"width": 640, "height": 400} if platform.system() == "Darwin" else {"width": 700, "height": 475}
         self.context = await self.browser.new_context(
