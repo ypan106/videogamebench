@@ -201,7 +201,12 @@ class LLMClient:
         
         # Generate response using litellm
         try:
+            # Check if we've exceeded the maximum cost
+            if self.total_cost > self.max_cost:
+                raise Exception(f"Maximum cost limit (${self.max_cost}) exceeded. Total cost: ${self.total_cost:.2f}")
+                
             start_time = time.time()
+            messages = litellm.utils.trim_messages(messages, self.model)
             response = await litellm.acompletion(
                 model=self.model,
                 messages=messages,
@@ -211,14 +216,9 @@ class LLMClient:
             response_time = time.time() - start_time
             
             # Calculate and update cost
-            input_tokens = response.usage.prompt_tokens
-            output_tokens = response.usage.completion_tokens
-            request_cost = self._calculate_cost(input_tokens, output_tokens)
+            request_cost = litellm.completion_cost(model=self.model, completion_response=response)
+            # request_cost = self._calculate_cost(input_tokens, output_tokens)
             self.total_cost += request_cost
-            
-            # Check if we've exceeded the maximum cost
-            if self.total_cost > self.max_cost:
-                raise Exception(f"Maximum cost limit (${self.max_cost}) exceeded. Total cost: ${self.total_cost:.2f}")
             
             # Log cost information
             self.file_logger.info(f"Request cost: ${request_cost:.4f}")
