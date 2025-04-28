@@ -54,7 +54,7 @@ You can specify a model name with `--model` (according to [LiteLLM](https://gith
 ```bash
 # First start ollama server
 
-python main.py --game kirby --model ollama/llama2 --api_base http://localhost:11434 --enable-ui
+python main.py --game kirby --model ollama/llama2 --api-base http://localhost:11434 --enable-ui
 ```
 
 We also provide a GUI with `tkinter` to view the agent's actions, thoughts, memory, etc. with `--enable-ui`:
