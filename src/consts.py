@@ -9,10 +9,10 @@ DOS_GAME_LITE_HTML_TEMPLATE = """<!DOCTYPE html>
     <title>JS-DOS Game Player</title>
     
     <!-- js-dos style sheet -->
-    <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
+    <link rel="stylesheet" href="https://v8.js-dos.com/8.xx/8.3.14/js-dos.css">
     
     <!-- js-dos -->
-    <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
+    <script src="https://v8.js-dos.com/8.xx/8.3.14/js-dos.js"></script>
 </head>
 <body>
     <div id="dos" style="width: 640px; height: 400px;"></div>
@@ -61,10 +61,10 @@ DOS_GAME_HTML_TEMPLATE = """<!DOCTYPE html>
     <title>JS-DOS Game Player</title>
     
     <!-- js-dos style sheet -->
-    <link rel="stylesheet" href="https://v8.js-dos.com/latest/js-dos.css">
+    <link rel="stylesheet" href="https://v8.js-dos.com/8.xx/8.3.14/js-dos.css">
     
     <!-- js-dos -->
-    <script src="https://v8.js-dos.com/latest/js-dos.js"></script>
+    <script src="https://v8.js-dos.com/8.xx/8.3.14/js-dos.js"></script>
 </head>
 <body>
     <div id="dos" style="width: 640px; height: 400px;"></div>
