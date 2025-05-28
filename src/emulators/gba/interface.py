@@ -3,8 +3,9 @@ from PIL import Image
 import os
 from pyboy import PyBoy
 from pyboy.utils import WindowEvent
+from src.emulators.interface_base import VideoGameBenchInterface
 
-class GBAInterface():
+class GBAInterface(VideoGameBenchInterface):
     """Game Boy interface using PyBoy."""
     
     # Button mappings to PyBoy window events
@@ -32,9 +33,9 @@ class GBAInterface():
     }
     
     def __init__(self, render: bool = False):
+        super().__init__()
         self.pyboy = None
         self.render = render
-        self.pressed_buttons = set()
 
     def load_game(self, rom_path: str, uncapped: bool = False) -> bool:
         """Load a Game Boy ROM."""
@@ -58,10 +59,16 @@ class GBAInterface():
     
     def no_op(self, skip_frames: int = 1):
         """
-        Skip frames while waiting.
+        Run the emulator for a specified number of frames without any input actions.
+        This is useful for waiting or advancing the game state passively.
+
+        Args:
+            skip_frames: Number of frames to run with no input. Each frame advances
+                        the game state by one tick. Default is 1 frame.
         """
         if not self.pyboy:
             raise RuntimeError("No ROM loaded")
+
         for _ in range(skip_frames):
             self.pyboy.tick(1, render=True)
 
@@ -71,7 +78,17 @@ class GBAInterface():
         return obs, 0.0, False, {}
             
     def step(self, action: Dict[str, bool], skip_frames: int = 10) -> Tuple[Dict[str, Any], float, bool, Dict[str, Any]]:
-        """Execute one frame with the given input."""
+        """
+        Execute one frame with the given input action.
+        
+        Takes a dictionary mapping button names to boolean values indicating if they should be pressed,
+        advances the emulator by the specified number of frames while applying those button presses,
+        and returns the resulting game state.
+
+        Args:
+            action: Dictionary mapping button names (str) to pressed state (bool)
+            skip_frames: Number of frames to advance after applying input. Default 10.
+        """
         if not self.pyboy:
             raise RuntimeError("No ROM loaded")
             
@@ -81,11 +98,8 @@ class GBAInterface():
                 self.pyboy.send_input(self.BUTTON_MAP[button])
                 self.pyboy.send_input(self.RELEASE_MAP[button], delay=skip_frames)
             
-        for _ in range(skip_frames):
+        for _ in range(skip_frames+1):
             self.pyboy.tick(1, True)
-        
-        # Run one frame
-        # self.pyboy.tick(skip_frames, render=False, sound=False)
         
         # Get new state
         obs = self.get_observation()
@@ -110,21 +124,6 @@ class GBAInterface():
             self.pyboy.stop()
             self.pyboy = None
             
-    def get_memory(self, address: int, length: int = 1) -> bytes:
-        """Read from game memory."""
-        return b'\x00' * length
-
-    def set_memory(self, address: int, value: bytes) -> None:
-        """Write to game memory."""
-        pass
-
-    def save_state(self) -> bytes:
-        """Save current emulator state."""
-        return b''
-
-    def load_state(self, state: bytes) -> bool:
-        """Load emulator state."""
-        return True
 
     def reset(self) -> Dict[str, Any]:
         """Reset the game state and return initial observation."""

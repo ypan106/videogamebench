@@ -33,15 +33,15 @@ VITALITY AND CHANCES:
 - Game ends when all chances are depleted
 
 SPECIAL NOTES:
-- You can float indefinitely by repeatedly pressing the A button
+- You can float indefinitely by repeatedly pressing the Up button after jumping in the air (with 'A')
 - Inhaled enemies can be used as projectile weapons
 - During boss battles, watch the boss's vitality bar above Kirby's
 - If stuck, you can reset the game by pressing A, B, START, and SELECT simultaneously
 
 A few things you should ALWAYS remember:
-1. For things that say "IN" or black doors / lite doors, Kirby has to go into it to go into a room. Don't just hover above it.
+1. For things that say "IN" or black doors / light doors, Kirby has to be standing (not floating) and go into it to go into a room. Don't just hover above it.
 2. Shining stars (called warp stars) are the end of the level, and transition you further into the game. Kirby has to go into it or step on it.
-3. Do not hit enemies directly, or Kirby will take damage. Use your abilities to fight!
+3. Do not hit enemies directly, or Kirby will take damage. Spit out enemies (not bosses) or items like bombs back to damage your enemies!
 
 Kirby is a classic platformer, so you generally should continue to the right to progress in the game.
 Respond with a clear sequence of actions, explaining your reasoning for each decision.

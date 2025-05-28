@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Other stuff
+*.DS_Store
+
 # C extensions
 *.so
 
@@ -172,3 +175,31 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Virtual environments
+venv/
+virtualenv/
+ENV/
+.env
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Project specific
+/roms/
+/logs/
+/exps/
+/twitter/
+/demo/
+/examples/
+*.gb
+*.gbc
+*.gba
+*.zip
+*.rar
+*.7z
+

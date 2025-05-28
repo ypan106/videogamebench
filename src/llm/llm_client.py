@@ -16,6 +16,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger("llm_client")
 
+# litellm._turn_on_debug()
+
 class LLMClient:
     """
     Client for interacting with language models using litellm.
@@ -26,7 +28,7 @@ class LLMClient:
         api_key: str,
         temperature: float = 0.7,
         max_tokens: int = 1024,
-        max_cost: float = 10.0,  # Maximum cost in USD
+        max_cost: float = 30.0,  # Maximum cost in USD
         log_dir: Optional[Path] = None,
         api_base: Optional[str] = None # For Ollama
     ):
@@ -97,6 +99,7 @@ class LLMClient:
             "gpt-3.5-turbo": {"input": 0.0005, "output": 0.0015},
             "claude-3-opus-20240229": {"input": 0.015, "output": 0.075},
             "claude-3-sonnet-20240229": {"input": 0.003, "output": 0.015},
+            "together_ai/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8": {"input": 0.00027, "output": 0.00085},
         }
 
     def _setup_file_logger(self) -> logging.Logger:
@@ -121,6 +124,9 @@ class LLMClient:
         
         cost = (input_tokens * costs["input"] + output_tokens * costs["output"]) / 1000
         return cost
+    
+    def get_total_cost(self) -> float:
+        return self.total_cost
 
     async def generate_response(
         self, 
@@ -143,7 +149,6 @@ class LLMClient:
 
         
         # If image data is provided, save it and add it to the last user message
-        screenshot_path = None
         if image_data and messages and messages[-1]["role"] == "user":
             # Convert the last text message to a list format
             original_text = messages[-1]["content"]
@@ -198,26 +203,35 @@ class LLMClient:
             })
             
         self.file_logger.info(f"Messages: {json.dumps(messages_log, indent=2)}")
-        
+
         # Generate response using litellm
         try:
             # Check if we've exceeded the maximum cost
             if self.total_cost > self.max_cost:
                 raise Exception(f"Maximum cost limit (${self.max_cost}) exceeded. Total cost: ${self.total_cost:.2f}")
-                
+
             start_time = time.time()
-            messages = litellm.utils.trim_messages(messages, self.model)
+
+            # Currently unsupported
+            if self.model != "together_ai/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8":
+                messages = litellm.utils.trim_messages(messages, self.model, trim_ratio=1)
+
             response = await litellm.acompletion(
                 model=self.model,
                 messages=messages,
                 temperature=self.temperature,
-                max_tokens=self.max_tokens
+                max_tokens=self.max_tokens,
             )
             response_time = time.time() - start_time
             
             # Calculate and update cost
-            request_cost = litellm.completion_cost(model=self.model, completion_response=response)
-            # request_cost = self._calculate_cost(input_tokens, output_tokens)
+            if self.model != "together_ai/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8":
+                request_cost = litellm.completion_cost(model=self.model, completion_response=response)
+            else:
+                input_tokens = response.usage.prompt_tokens
+                output_tokens = response.usage.completion_tokens
+                request_cost = self._calculate_cost(input_tokens, output_tokens)
+
             self.total_cost += request_cost
             
             # Log cost information
@@ -249,7 +263,7 @@ class LLMClient:
         task: str, 
         system_message: Dict[str, str],
         history: List[Dict[str, str]], 
-        screenshot: Optional[bytes | List[bytes]] = None
+        screenshots: Optional[bytes | List[bytes]] = None
     ) -> Dict[str, Any]:
         """
         Generate a ReACT (Reasoning, Action, Observation) response.
@@ -276,7 +290,7 @@ class LLMClient:
         messages = [system_message] + history + [user_message]
         
         # Generate response
-        response_text = await self.generate_response(None, messages, screenshot)
+        response_text = await self.generate_response(None, messages, screenshots)
         
         # Parse the JSON response
         try:
@@ -312,9 +326,4 @@ class LLMClient:
             error_msg = f"Error parsing response: {str(e)}\nOriginal response: {response_text}"
             self.file_logger.error(error_msg)
             
-            return {
-                "thought": "I couldn't parse the response properly. Let me try again.",
-                "action": "error",
-                "action_input": error_msg,
-                "memory": ""
-            }
+            return None

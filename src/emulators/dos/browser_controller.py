@@ -45,6 +45,8 @@ class BrowserController:
             game: Name of the game to preload
         """
         config_path = f"configs/{game}/preload.txt"
+
+        # Get around locking
         try:
             with open(config_path, 'r') as f:
                 actions = f.readlines()
@@ -138,7 +140,7 @@ class BrowserController:
             raise ValueError("Browser not started")
         
         # Capture screenshot in JPEG format
-        screenshot = await self.page.screenshot(type="jpeg", quality=100)
+        screenshot = await self.page.screenshot(type="jpeg", quality=100, clip={"x": 0, "y": 0, "width": 640, "height": 400})
         logger.info("Screenshot captured")
         return screenshot
         
@@ -235,7 +237,7 @@ class BrowserController:
         await self.page.mouse.down()
         
         # Generate a human-like path for the drag movement
-        path = self._generate_human_like_path(start_x, start_y, x, y)
+        path = self._generate_straight_path(start_x, start_y, x, y)
         
         # Move the mouse along the path
         for point_x, point_y in path:
@@ -359,6 +361,42 @@ class BrowserController:
             await self.page.keyboard.press(key, delay=delay_ms)
         
         logger.info(f"Pressed key: {key}")
+
+    def _generate_straight_path(
+        self, 
+        start_x: float, 
+        start_y: float, 
+        end_x: float, 
+        end_y: float,
+    ) -> List[Tuple[float, float]]:
+        """
+        Generate a straight line path between two points.
+        
+        Args:
+            start_x: Starting x coordinate
+            start_y: Starting y coordinate
+            end_x: Ending x coordinate
+            end_y: Ending y coordinate
+            control_points: Unused, kept for compatibility
+            
+        Returns:
+            A list of (x, y) coordinates representing the straight path
+        """
+        # Calculate distance between start and end points
+        distance = math.sqrt((end_x - start_x) ** 2 + (end_y - start_y) ** 2)
+        
+        # Determine number of steps based on distance
+        steps = max(10, int(distance / 10))
+        
+        path = []
+        for i in range(steps + 1):
+            t = i / steps
+            # Linear interpolation between start and end points
+            x = start_x + t * (end_x - start_x)
+            y = start_y + t * (end_y - start_y)
+            path.append((x, y))
+            
+        return path
 
     def _generate_human_like_path(
         self, 

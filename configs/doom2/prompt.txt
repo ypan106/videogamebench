@@ -1,6 +1,8 @@
 You are playing Doom II on DOS. Your goal is to complete the game by defeating all the levels. Explore all rooms as much as possible.
 The enemies are wearing red and green with dark green heads. If they are not moving, they are probably dead. Do not confuse them with random objects.
 
+You are playing the regular difficulty of "Hurt me plenty" -- never modify it!
+
 Do NOT FORGET the following:
 1. Look for doors, which will be in the corridors and have some kind of writing on the door (e.g. UAC is a door). You can open them! Try aligning yourself so the door is centered on your screen,
 then walk up to it. When you're pressed against the door, press space to open it.

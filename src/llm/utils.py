@@ -20,6 +20,12 @@ def convert_to_dict(
             for act in action:
                 if act in result_dict:
                     result_dict[act] = True
+
+            # Don't allow START and SELECT to be pressed simultaneously
+            # Prevent restarting the emulator
+            if result_dict.get("START") and result_dict.get("SELECT"):
+                result_dict["START"] = False
+                result_dict["SELECT"] = False
         results.append(result_dict)
 
     return results
@@ -38,7 +44,9 @@ def parse_actions_response(text: str) -> List[str | Tuple[str, ...]]:
     for match in matches:
         try:
             # Safely evaluate the string as Python code
-            actions = eval(match.strip())
+            # Remove any comments after // or #
+            action = re.sub(r'(?://|#).*$', '', match, flags=re.MULTILINE)
+            actions = eval(action.strip())
             combined_actions.extend(actions)  # Use extend instead of append
         except:
             print(f"Failed to parse actions: {match}")

@@ -16,8 +16,6 @@ Think step by step:
 3. What action would help progress in the game?
 4. What buttons need to be pressed to take that action?
 
-Hint: In the beginning of the game, talk to the man NPC in right side of the house until you get your shield then leave.
-
 You cannot move if dialogue is on the screen until you finish it, so keep pressing A until it is over.
 
 Available buttons: A, B, START, SELECT, UP, DOWN, LEFT, RIGHT 

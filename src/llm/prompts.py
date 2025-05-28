@@ -107,6 +107,8 @@ Another example of pressing multiple buttons simultaneously:
 ]
 ```
 
+Never press START and SELECT simultaneously, as this will restart the emulator.
+
 Available buttons: A, B, START, SELECT, UP, DOWN, LEFT, RIGHT"""
 }
 

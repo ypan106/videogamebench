@@ -13,17 +13,16 @@ Tips:
 2. When trainers see you, they will want to battle.
 3. In a Pokemon battle, you attack your enemies and you lose if your Pokemon all reach 0 HP.
 4. When typing a name, just press A twice to exit when your name is full. Don't go right then A.
-5. At the beginning of the game, talk to your mom before leaving to find Professor Oak.
-6. Wild Pokemon appear randomly when walking in tall grass, caves, or while surfing.
-7. During battles (using the movement keys to move icons):
+5. Wild Pokemon appear randomly when walking in tall grass, caves, or while surfing.
+6. During battles (using the movement keys to move icons):
    - Choose "FIGHT" to use your Pokemon's moves
    - Choose "BAG" to use items like Potions or Pokeballs
    - Choose "POKEMON" to switch to a different Pokemon
    - Choose "RUN" to attempt escaping from wild Pokemon battles
-8. Type advantages are crucial: Water beats Fire, Fire beats Grass, Grass beats Water
-9. Use Pokemon Centers (buildings with red roofs) to heal your Pokemon for free
-10. Buy supplies like Pokeballs and Potions at PokeMarts (buildings with blue roofs)
-11. Read dialogue and continue by pressing 'A'.
+7. Type advantages are crucial: Water beats Fire, Fire beats Grass, Grass beats Water
+8. Use Pokemon Centers (buildings with red roofs) to heal your Pokemon for free
+9. Buy supplies like Pokeballs and Potions at PokeMarts (buildings with blue roofs)
+10. Read dialogue and continue by pressing 'A'.
 
 Each movement key (e.g. UP, DOWN, LEFT, RIGHT) will move your character (with the hat) one tile in that direction.
 Keep that in mind, and calculate where to go based on what you want to do. 

@@ -30,15 +30,23 @@ game_instance = None
 def parse_args():
     parser = argparse.ArgumentParser(description="Game Emulation and Evaluation with LLMs")
     
-    # Emulator selection (not necessary if config is specified)
+    # VideoGameBench emulator attributes
     parser.add_argument("--emulator", choices=["dos", "gba"],
                        help="Which emulator to use ('dos' or 'gba'). Overwritten if config is specified.")
+    parser.add_argument("--game", type=str, 
+                       help="Name or URL of a js-dos game bundle to run or GBA game to load")
+    parser.add_argument("--lite", action="store_true", 
+                       help="Lite-mode, so not real time. Game pauses between actions.")
+    parser.add_argument("--max-steps", type=int, default=15000, 
+                       help="Maximum number of steps to run")
 
     # Common arguments
-    parser.add_argument("--api-key", type=str, 
-                       help="API key for the chosen LLM provider")
+    parser.add_argument("--enable-ui", action="store_true", 
+                       help="Enable the UI for the agent")
+    parser.add_argument("--threshold", type=float,  
+                       help="Threshold for checkpoint progress")
     parser.add_argument("--model", type=str, default="gpt-4o",
-                       help="The LLM model to use (for LiteLLM names)")
+                       help="The LLM model to use (for LiteLLM names). Default is gpt-4o")
     parser.add_argument("--headless", action="store_true", 
                        help="Run the emulator without visual display")
     parser.add_argument("--config-folder", type=str, default="configs/",
@@ -47,18 +55,16 @@ def parse_args():
                        help="The maximum number of tokens to generate")
     parser.add_argument("--temperature", type=float, default=0.7, 
                        help="The temperature for LLM generation")
-    parser.add_argument("--game", type=str, 
-                       help="Name or URL of a js-dos game bundle to run or GBA game to load")
-    parser.add_argument("--enable-ui", action="store_true", 
-                       help="Enable the UI for the agent")
-    parser.add_argument("--record", action="store_true",
-                       help="Record both game and agent monitor screens. TODO: Doesn't do anything right now.")
-    parser.add_argument("--record-path", type=str, default=None,
-                       help="Path to save the recording (default: recordings/gameplay_TIMESTAMP.mp4)")
-    parser.add_argument("--lite", action="store_true", 
-                       help="Lite-mode, so not real time. Game pauses between actions.")
-    parser.add_argument("--num-screenshots-per-action", type=int, default=3, 
-                       help="Number of screenshots to take per action to add in context.")
+    parser.add_argument("--num-screenshots-per-action", type=int, default=0, 
+                       help="Number of screenshots to take per action to add in context. 0 has default behavior described in the paper.")
+    parser.add_argument("--max-context-size", type=int, default=20, 
+                       help="Maximum number of messages in the context window. Default is 20.")
+
+    # LiteLLM + Ollama args
+    parser.add_argument("--api-key", type=str, 
+                       help="API key for the chosen LLM provider")
+    parser.add_argument("--api-base", type=str, default=None,
+                       help="API base URL for Ollama or other providers")
 
     # DOS-specific arguments
     parser.add_argument("--port", type=int, default=8000, 
@@ -71,9 +77,7 @@ def parse_args():
                        help="Just open the website without agent interaction (DOS only)")
     
     # GBA-specific arguments
-    parser.add_argument("--max-steps", type=int, default=10000, 
-                       help="Maximum number of steps to run (GBA only)")
-    parser.add_argument("--step-delay", type=float, default=0.1, 
+    parser.add_argument("--step-delay", type=float, default=0.0, 
                        help="Delay between steps in seconds (GBA only)")
     parser.add_argument("--skip-frames", type=int, default=1, 
                        help="Number of frames to skip per step (GBA only)")
@@ -83,9 +87,7 @@ def parse_args():
                        help="Maximum tokens in conversation history (GBA only)")
     parser.add_argument("--action-frames", type=int, default=15,
                        help="Number of frames to run each action for (GBA only)")
-    # Add api_base argument
-    parser.add_argument("--api-base", type=str, default=None,
-                       help="API base URL for Ollama or other providers")
+
 
     return parser.parse_args()
 
@@ -105,18 +107,19 @@ def load_game_config(args):
     prompt_file = config_dir / "prompt.txt"
     # Try loading checkpoints if they exist
     checkpoint_dir = config_dir / "checkpoints"
-    if checkpoint_dir.exists():
+    if os.path.exists(checkpoint_dir):
         try:
             # Get all image files and sort numerically
             checkpoint_files = sorted(
                 [f for f in checkpoint_dir.glob("*.png")],
-                key=lambda x: int(x)
+                key=lambda x: int(x.stem)  # Use stem to get filename without extension
             )
+            print("Checkpoint files:", checkpoint_files)
             if checkpoint_files:
                 checkpoint_hashes = []
                 for checkpoint in checkpoint_files:
                     img = Image.open(checkpoint)
-                    hash_str = str(hash_image(img))
+                    hash_str = hash_image(img)
                     checkpoint_hashes.append(hash_str)
                 args.checkpoints = checkpoint_hashes
             else:
@@ -174,7 +177,7 @@ def handle_shutdown_signal(sig, frame):
     
     sys.exit(0)
 
-async def main_async():
+async def videogamebench_start():
     """Main async entry point."""
     args = parse_args()
     args = load_game_config(args)
@@ -185,12 +188,14 @@ async def main_async():
         args.model = "claude-3-7-sonnet-20250219"
     elif args.model == "gemini-2.0-flash":
         args.model = "gemini/gemini-2.0-flash"
+    elif args.model == "llama4":
+        args.model = "together_ai/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
 
     if args.emulator == "dos":
-        from src.run_dos import run_dos_emulator
+        from src.run_vgbench_dos import run_dos_emulator
         await run_dos_emulator(args)
     elif args.emulator == "gba":
-        from src.run_gb import run_gba_emulator
+        from src.run_vgbench_gb import run_gba_emulator
         await run_gba_emulator(args)
     else:
         print("No emulator specified. Exiting.")
@@ -203,6 +208,6 @@ if __name__ == "__main__":
     
     # Run the main function
     try:
-        asyncio.run(main_async())
+        asyncio.run(videogamebench_start())
     except KeyboardInterrupt:
         print("\nProgram interrupted. Cleaning up...")
