@@ -188,7 +188,15 @@ There are two main ways to generate videos / clips from VideoGameBench. The firs
 record the screen as it plays (best for streaming). The second is to use the frames provided to
 the model to generate a video using OpenCV, which we used to generate on our website. We provide
 a Python notebook to generate these videos from saved frames for both MS-DOS and Game Boy games in
-the `notebooks/generate_clips.ipynb` file.
+the `notebooks/generate_clips.ipynb` file. For example, we generate a video of Gemini 2.5 Pro playing Kirby using only frames given to the agent:
+
+
+<p align="center">
+  <video width="50%" controls>
+    <source src="media/clips/clips_example.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
 
 ## License
 **Disclaimer**: While all parts of this codebase fall under the MIT license (i.e. free use for both personal and commercial purposes), the **games** themselves do not. You must legally own the games to play them.
