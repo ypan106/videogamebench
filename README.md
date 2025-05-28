@@ -7,6 +7,7 @@
   
 [![Website + Blogpost](https://img.shields.io/badge/VideoGameBench-Website%20%26%20Blog-blue?style=for-the-badge&logo=readme&logoColor=white&labelColor=1F2937&color=DC2626)](https://www.vgbench.com)
 [![arXiv](https://img.shields.io/badge/arXiv-2505.18134-b31b1b.svg?style=for-the-badge)](https://arxiv.org/abs/2505.18134)
+[![Discord](https://img.shields.io/discord/1377021565773807676?style=for-the-badge&logo=discord&logoColor=white&label=Discord&labelColor=5865F2&color=5865F2)](https://discord.gg/W89VqYhQcy)
 
 </div>
 
