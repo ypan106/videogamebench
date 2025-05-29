@@ -111,6 +111,8 @@ The codebase easily supports more MS-DOS and GameBoy games, but we fix a diverse
 6. [2D] [platformer] Kirby's Dream Land (DX for GBC)
 7. [2D] [puzzle] The Incredible Machine (1993)
 
+Note: There are three secret games in the test set which we do not release in this repo. We will run them on our side for new submissions.
+
 ### VideoGameBench `dev` set games
 DOS Games:
 1. [3D] [shooter] Doom
