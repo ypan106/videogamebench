@@ -98,12 +98,7 @@ async def run_gba_emulator(args):
     )
     
     try:
-        if not args.lite and gba_agent:
-            # Properly await the realtime evaluation instead of creating a new event loop
-            metrics = await evaluator.run_episode_realtime(gba_agent)
-        else:
-            # Run the normal synchronous evaluation
-            metrics = await evaluator.run_episode_lite(gba_agent)
+        metrics = await evaluator.run_episode(gba_agent, args.lite)
         
     except KeyboardInterrupt:
         print("\nEvaluation interrupted by user")

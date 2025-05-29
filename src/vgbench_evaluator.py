@@ -83,6 +83,22 @@ class GBEvaluator(BaseVGBenchEvaluator):
         self.fake_actions = fake_actions
         self.skip_frames = skip_frames
         self.action_frames = action_frames
+    
+
+    async def run_episode(self, agent: GameBoyVGAgent, lite: bool = False) -> Dict[str, Any]:
+        """Run an episode of the game.
+        
+        Args:
+            agent: The agent to use for the episode.
+            
+        Returns:
+            Dict containing evaluation metrics.
+        """
+        if lite:
+            return await self.run_episode_lite(agent)
+        else:
+            return await self.run_episode_realtime(agent)
+
 
 
     async def run_episode_lite(self, gba_agent: GameBoyVGAgent) -> Dict[str, Any]:
