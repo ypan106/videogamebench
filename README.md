@@ -192,6 +192,11 @@ a Python notebook to generate these videos from saved frames for both MS-DOS and
 the `notebooks/generate_clips.ipynb` file. For example, we generate a video of Gemini 2.5 Pro playing Kirby using only frames given to the agent:
 
 
+
+https://github.com/user-attachments/assets/e99cd056-62a6-46c7-8ab6-7501423b1474
+
+
+
 <p align="center">
   <video width="50%" controls>
     <source src="media/clips/clips_example.mp4" type="video/mp4">
