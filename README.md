@@ -22,7 +22,7 @@
 
 For mouse + keyboard games, we also provide a simple interface for helping the model generically / properly click on positions on the screen. We provide some example trajectories below of the model playing these games **real-time**, i.e. the model calls are async with respect to the game.
 
-## Installation
+## Installation ⚙️
 
 ```bash
 conda create -n videogamebench python=3.10
@@ -32,7 +32,7 @@ pip install -e .
 playwright install # Install playwright for DOS games
 ```
 
-## Quick Start
+## Quick Start 🚀
 ### Running Game Boy Games (Gameboy Emulator)
 Once you've downloaded and placed the appropriate ROMs into the `roms/` folder (for expected names, see `src/consts.py`). We provide a simple VideoGameAgent for Game Boy games which you can run below:
 
@@ -92,10 +92,10 @@ We've run each of the following models:
 
 We provide a list of scripts run in `all_experiments.sh`.
 
-## Credit to Emulators, Platforms, etc.
+## Credit to Emulators, Platforms, etc. 
 We want to be clear on what we built and what we build on top of! Our benchmark relies heavily on [PyBoy](https://github.com/Baekalfen/PyBoy) for a Gym-based Game Boy emulator, [JS-DOS](https://js-dos.com/overview.html) for MS-DOS games, and [Playwright](https://playwright.dev/) for interacting with browser-based games. We also use [LiteLLM](https://docs.litellm.ai/docs/) for handling models, so you can use run almost any frontier VLM API! You will need to provide your own API keys.
 
-## VideoGameBench: List of Games
+## VideoGameBench: List of Games 🎮
 The codebase easily supports more MS-DOS and GameBoy games, but we fix a diverse set of games for evaluation purposes. The games relevant to **VideoGameBench** are below:
 
 <p align="center">
@@ -172,7 +172,7 @@ DOS-specific options:
   --website-only           Just open the website without agent interaction
 ```
 
-## Logging
+## Logging 📝
 
 The system creates comprehensive logs for each session including:
 - Screenshot images at each step (found in `game_screen/` or `lite_screenshots` for lite games.)
@@ -183,7 +183,7 @@ The system creates comprehensive logs for each session including:
 Logs are stored in the `logs/{game}/{model}/{run}` directory with timestamps.
 
 
-## Generating Videos / Clips
+## Generating Videos / Clips 🎬
 
 There are two main ways to generate videos / clips from VideoGameBench. The first is to just
 record the screen as it plays (best for streaming). The second is to use the frames provided to
