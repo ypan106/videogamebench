@@ -383,7 +383,11 @@ class GameBoyVGAgent(VideoGameBenchAgent):
     def _add_response_to_history(self, response: str) -> None:
         """Add the LLM response to conversation history, excluding reflection content."""
         response_without_reflection = re.sub(r'```reflection\s*.*?\s*```', '', response, flags=re.DOTALL).strip()
-        self.add_to_history("assistant", "[Your thought]: " + response_without_reflection)
+
+        # Really annoying thing to patch, but some models will generate this tag.
+        if not response_without_reflection.startswith("[Your thought]:"):
+            response_without_reflection = "[Your thought]: " + response_without_reflection
+        self.add_to_history("assistant", response_without_reflection)
 
     def _update_ui_state(self, actions: Optional[str] = None) -> None:
         """Update UI elements with current state."""
